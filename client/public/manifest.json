@@ -1,0 +1,6 @@
+{
+  "short_name": "Todo list",
+  "name": "Create React App Todo list",
+  "start_url": ".",
+  "display": "standalone"
+}
