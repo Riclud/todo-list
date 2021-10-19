@@ -10,12 +10,17 @@ export class UserService {
     private userRepository: Repository<UserEntity>,
   ) {}
 
-  getByLogin(login: string) {
-    return this.userRepository.findOne({ where: { login } });
-  }
+  get(type: 'LOGIN' | 'userID', payload: { login?: string; id?: string }) {
+    if (type === 'LOGIN') {
+      if (!payload.login) return null;
+      return this.userRepository.findOne({ where: { login: payload.login } });
+    }
 
-  getByID(id: string) {
-    return this.userRepository.findOne(id);
+    if (type === 'userID') {
+      return this.userRepository.findOne(payload.id);
+    }
+
+    return null;
   }
 
   create(login: string, password: string) {
