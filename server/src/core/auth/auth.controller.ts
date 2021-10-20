@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   HttpStatus,
   Post,
   Res,
@@ -58,6 +59,7 @@ export class AuthController {
   }
 
   @Post('register')
+  @HttpCode(200)
   @Public()
   @ApiOperation({ summary: 'Register user' })
   @ApiBody({ type: CreateUserDto })
@@ -78,11 +80,11 @@ export class AuthController {
 
     this.setRefreshToken(refresh_token, res);
 
-    res.status(200);
     return new AuthOK(access_token);
   }
 
   @Post('login')
+  @HttpCode(200)
   @Public()
   @ApiOperation({ summary: 'Login user' })
   @ApiBody({ type: LoginUserDto })
@@ -101,11 +103,11 @@ export class AuthController {
 
     this.setRefreshToken(refresh_token, res);
 
-    res.status(200);
     return new AuthOK(access_token);
   }
 
   @Get('refresh')
+  @HttpCode(200)
   @Public()
   @ApiOperation({ summary: 'Refresh user token' })
   @ApiOkResponse({ type: AuthOK })
@@ -120,7 +122,6 @@ export class AuthController {
 
     this.setRefreshToken(refresh_token, res);
 
-    res.status(200);
     return new AuthOK(access_token);
   }
 
@@ -135,11 +136,11 @@ export class AuthController {
   ) {
     await this.authService.logout(token);
     this.deleteRefreshToken(res);
-    res.status(200);
     return new OK();
   }
 
   @Post('restore')
+  @HttpCode(200)
   @Public()
   @ApiOperation({ summary: 'Restore user password' })
   @ApiBody({ type: RestoreUserDto })
@@ -153,11 +154,11 @@ export class AuthController {
 
     await this.authService.restore(login);
 
-    res.status(200);
     return new OK();
   }
 
   @Post('restore-accept')
+  @HttpCode(200)
   @Public()
   @ApiOperation({ summary: 'Restore accept user password' })
   @ApiBody({ type: RestoreAcceptDto })
@@ -170,11 +171,11 @@ export class AuthController {
     const { code, password, accept_password } = restoreAcceptDto;
 
     await this.authService.restoreAccept(code, password, accept_password);
-    res.status(200);
     return new OK();
   }
 
   @Delete('delete')
+  @HttpCode(200)
   @ApiOperation({ summary: 'Delete user account' })
   @ApiBearerAuth()
   @ApiOkResponse({ type: OK })

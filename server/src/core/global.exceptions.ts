@@ -29,7 +29,30 @@ export class BadRequestException extends HttpException {
   @ApiProperty({ example: HttpStatus.BAD_REQUEST })
   statusCode: number;
 
-  @ApiProperty({ example: 'error message' })
+  @ApiProperty({ example: 'Error message' })
+  message: string;
+
+  constructor(message: string) {
+    const statusCode = HttpStatus.BAD_REQUEST;
+    super(message, statusCode);
+
+    this.statusCode = statusCode;
+    this.message = message;
+  }
+
+  getData() {
+    return {
+      statusCode: this.statusCode,
+      message: this.message,
+    };
+  }
+}
+
+export class AccessErrorException extends HttpException {
+  @ApiProperty({ example: HttpStatus.BAD_REQUEST })
+  statusCode: number;
+
+  @ApiProperty({ example: 'Acces error' })
   message: string;
 
   constructor(message: string) {
