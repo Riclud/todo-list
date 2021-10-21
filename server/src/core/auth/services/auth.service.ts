@@ -106,8 +106,8 @@ export class AuthService {
     await transporter.sendMail({
       from: process.env.GOOGLE_TEMP_EMAIL,
       to: login,
-      subject: 'Todo list код восстановления',
-      text: `Ваш код для восстановления пароля: ${code}`,
+      subject: 'Todo list',
+      text: `Код для восстановления пароля: ${code}`,
     });
   }
 
