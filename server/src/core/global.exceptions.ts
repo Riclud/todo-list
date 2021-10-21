@@ -55,12 +55,34 @@ export class AccessErrorException extends HttpException {
   @ApiProperty({ example: 'Acces error' })
   message: string;
 
-  constructor(message: string) {
+  constructor() {
     const statusCode = HttpStatus.BAD_REQUEST;
+    const message = 'Acces error';
     super(message, statusCode);
 
     this.statusCode = statusCode;
     this.message = message;
+  }
+
+  getData() {
+    return {
+      statusCode: this.statusCode,
+      message: this.message,
+    };
+  }
+}
+
+export class ElementNotFound extends HttpException {
+  @ApiProperty({ example: HttpStatus.NOT_FOUND })
+  statusCode: number;
+
+  @ApiProperty({ example: 'Element not found' })
+  message: string;
+
+  constructor(elementName: string) {
+    const statusCode = HttpStatus.NOT_FOUND;
+    const message = `${elementName} not found`;
+    super(message, statusCode);
   }
 
   getData() {

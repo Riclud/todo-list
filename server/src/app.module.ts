@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TodoModule } from './components/todo/todo.module';
 import { AuthModule } from './core/auth/auth.module';
 import { JwtAuthGuard } from './core/auth/jwt-auth.guard';
 
@@ -18,6 +19,7 @@ import { JwtAuthGuard } from './core/auth/jwt-auth.guard';
       synchronize: true,
     }),
     AuthModule,
+    TodoModule,
   ],
   providers: [
     {

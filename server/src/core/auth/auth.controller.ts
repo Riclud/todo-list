@@ -146,10 +146,7 @@ export class AuthController {
   @ApiBody({ type: RestoreUserDto })
   @ApiOkResponse({ type: OK })
   @ApiResponse({ type: BadRequestException, status: HttpStatus.BAD_REQUEST })
-  async restore(
-    @Body() restoreUserDto: RestoreUserDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async restore(@Body() restoreUserDto: RestoreUserDto) {
     const { login } = restoreUserDto;
 
     await this.authService.restore(login);
@@ -164,10 +161,7 @@ export class AuthController {
   @ApiBody({ type: RestoreAcceptDto })
   @ApiOkResponse({ type: OK })
   @ApiUnauthorizedResponse({ type: UnauthorizedException })
-  async restoreAccept(
-    @Body() restoreAcceptDto: RestoreAcceptDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async restoreAccept(@Body() restoreAcceptDto: RestoreAcceptDto) {
     const { code, password, accept_password } = restoreAcceptDto;
 
     await this.authService.restoreAccept(code, password, accept_password);
