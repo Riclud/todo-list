@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TaskFileEntity } from '../entites/task-file.entity';
-import { AccessErrorException } from '../../../core/global.exceptions';
+import {
+  AccessErrorException,
+  ElementNotFound,
+} from '../../../core/global.exceptions';
 import { unlinkSync } from 'fs';
 
 @Injectable()
@@ -11,6 +14,18 @@ export class TaskFileService {
     @InjectRepository(TaskFileEntity)
     private taskFileRepository: Repository<TaskFileEntity>,
   ) {}
+
+  async get(userID: string, fileID: string): Promise<string> {
+    const result = await this.taskFileRepository.findOne({
+      where: { userID, id: fileID },
+    });
+
+    if (!result) {
+      throw new ElementNotFound('File');
+    }
+
+    return result.link;
+  }
 
   async create(
     userID: string,

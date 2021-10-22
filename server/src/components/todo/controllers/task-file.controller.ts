@@ -9,6 +9,8 @@ import {
   UploadedFile,
   UseInterceptors,
   HttpStatus,
+  Get,
+  Res,
 } from '@nestjs/common';
 import { TaskFileService } from '../services/task-file.service';
 import {
@@ -31,11 +33,32 @@ import {
   UnauthorizedException,
   AccessErrorException,
 } from '../../../core/global.exceptions';
+import { Response } from 'express';
 
-@Controller('todo/task/file')
+@Controller('task/file')
 @ApiTags('Todo task file')
 export class TaskFileController {
   constructor(private taskFileService: TaskFileService) {}
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get file by ID' })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    schema: {
+      type: 'file',
+      format: 'binary',
+      description: 'success - download the file',
+    },
+  })
+  @ApiUnauthorizedResponse({ type: UnauthorizedException })
+  async get(
+    @User() user: jwtPayloadType,
+    @Param('id', ParseUUIDPipe) fileID: string,
+    @Res() res: Response,
+  ) {
+    const link = await this.taskFileService.get(user.id, fileID);
+    return res.sendFile(`/upload/${link}`, { root: '.' });
+  }
 
   @Post()
   @HttpCode(200)
@@ -44,7 +67,7 @@ export class TaskFileController {
       storage: diskStorage({
         destination: './upload',
         filename: (req, file, cb) =>
-          cb(null, `${Date.now()}.${file.mimetype.split('/')[1]}`),
+          cb(null, `${Date.now()}.${file.originalname.split('.')[1]}`),
       }),
     }),
   )
@@ -78,7 +101,10 @@ export class TaskFileController {
   @ApiOkResponse({ type: OK })
   @ApiResponse({ type: AccessErrorException, status: HttpStatus.BAD_REQUEST })
   @ApiUnauthorizedResponse({ type: UnauthorizedException })
-  async delete(@User() user: jwtPayloadType, @Param('id') fileID: string) {
+  async delete(
+    @User() user: jwtPayloadType,
+    @Param('id', ParseUUIDPipe) fileID: string,
+  ) {
     await this.taskFileService.delete(user.id, fileID);
     return new OK();
   }
