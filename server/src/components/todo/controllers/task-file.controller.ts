@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Delete,
   HttpCode,
@@ -60,7 +59,7 @@ export class TaskFileController {
     return res.sendFile(`/upload/${link}`, { root: '.' });
   }
 
-  @Post()
+  @Post(':id')
   @HttpCode(200)
   @UseInterceptors(
     FileInterceptor('file', {
@@ -81,7 +80,7 @@ export class TaskFileController {
   @ApiUnauthorizedResponse({ type: UnauthorizedException })
   async create(
     @User() user: jwtPayloadType,
-    @Body('taskID', ParseUUIDPipe) taskID: string,
+    @Param('id', ParseUUIDPipe) taskID: string,
     @UploadedFile() file: Express.Multer.File,
   ) {
     const { id: fileID } = await this.taskFileService.create(

@@ -29,7 +29,7 @@ export class ElementCreate extends OK {
 
   constructor(elementID: string) {
     super();
-    this.statusCode = HttpStatus.CREATED;
+    this.statusCode = HttpStatus.OK;
     this.id = elementID;
   }
 }

@@ -9,7 +9,7 @@ export class CreateTodoTaskDto {
 
   @ApiProperty({ example: 'Explore business trainings' })
   @IsString()
-  description: string;
+  description?: string;
 
   @ApiProperty({ example: '5cfcc81b-324f-492f-beab-5246d6e27cb8' })
   @IsUUID('4')
