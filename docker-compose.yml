@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+
+    restart: always
+
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123321
+      - POSTGRES_DB=todo-list
+      - PGDATA= /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data/pgdata
+
+  server:
+    build: server/
+    depends_on:
+      - postgres
+    restart: always
+    ports:
+      - 8000:8000
+    environment:
+      - PORT=8000
+
+        # !!!!
+      - NODE_ENV=development
+
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=123321
+      - DATABASE_NAME=todo-list
+
+      - JWT_ACCESS_SECRET_KEY=fdhfjsdhfjsdf
+      - JWT_REFRESH_SECRET_KEY=gdjbvnjv
+
+      - JWT_ACCESS_SECRET_TIME=1h
+      - JWT_REFRESH_SECRET_TIME=7d
+
+      - GOOGLE_TEMP_EMAIL=
+      - GOOGLE_TEMP_PASSWORD=
+
+    links:
+      - postgres
+
+  # client service
